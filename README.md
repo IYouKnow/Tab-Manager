@@ -1,50 +1,62 @@
 # Tab Manager Extension
 
-A modern browser extension to save, view, and manage your open tabs with a beautiful interface.
+An extension to save, view, and restore your open tabs with a beautiful, minimal interface.
+Your tab data stays private on your device. Works on Chrome, Firefox, Edge, Opera, and any Chromium-based browser.
+
+---
+
+![Tab Manager Popup](tm1.png)
+*Popup: Open tabs from URLs, save all open tabs*
+
+![Toolbar Badge Example](tm2.png)
+*Toolbar badge showing the number of open tabs*
+
+![Tab Manager Page](tm3.png)
+*Tab Manager page: view, copy, and manage saved URLs*
+
+---
 
 ## Features
 - Save all open tabs with one click
 - View and copy saved URLs in a dedicated manager page
 - Open multiple tabs from a list of URLs
 - Clear saved tabs with confirmation
-- Badge shows current open tab count
+- Shows the number of open tabs in the browser toolbar
 - Modern, minimal, dark-themed UI
 - No tracking, no remote code, secure by design
 
 ## Browser Compatibility
-- **Google Chrome** (and Chromium-based: Edge, Brave, Opera): Fully supported
-- **Mozilla Firefox:** Supported with a small manifest change (see below)
+- **Google Chrome, Microsoft Edge, Brave, Opera, or any Chromium-based browser:** Fully supported — use the TabManager release.
+- **Mozilla Firefox:** Fully supported — use the TabManager-FireFox release.
+
+## Releases
+
+There are **two releases** of this extension, ready to use:
+
+- **TabManager**: For Chrome, Edge, Brave, Opera (Chromium browsers)
+- **TabManager-FireFox**: For Firefox
+
+**You do not need to rename or modify any files.**
+Just download the release for your browser and follow the instructions below.
 
 ## Installation (Development Mode)
 
 ### Chrome, Edge, Brave, Opera
-1. Open `chrome://extensions` (or equivalent in your browser)
-2. Enable **Developer mode**
-3. Click **Load unpacked**
-4. Select the extension folder (with `manifest.json`)
+1. Download and extract the **TabManager** release.
+2. Open `chrome://extensions` (or equivalent in your browser)
+3. Enable **Developer mode**
+4. Click **Load unpacked**
+5. Select the extracted folder (with `manifest.json`)
 
 ### Firefox
-1. Open `about:debugging#/runtime/this-firefox`
-2. Click **Load Temporary Add-on**
-3. Select the extension folder, but first:
-    - Rename `manifest-firefox.json` to `manifest.json` (overwrite or backup the original)
-4. Select any file in the folder to load the extension
-
-## Publishing
-- **Chrome Web Store / Edge Add-ons / Opera Add-ons:** Use the default `manifest.json` (Manifest V3, service_worker)
-- **Firefox Add-ons (AMO):** Use `manifest-firefox.json` (rename to `manifest.json` before uploading)
-
-## Project Structure
-- `manifest.json` — Chrome/Chromium manifest (service worker)
-- `manifest-firefox.json` — Firefox manifest (background script)
-- `background.js` — Handles tab saving, badge, and messaging
-- `popup.html` / `popup.js` — Popup UI for saving/opening tabs
-- `tabmanager.html` / `tabmanager.js` — Full-page tab manager
-- `logo.png` — Extension icon
+1. Download and extract the **TabManager-FireFox** release.
+2. Open `about:debugging#/runtime/this-firefox`
+3. Click **Load Temporary Add-on**
+4. Select the extracted folder (with `manifest.json`)
 
 ## Security & Privacy
 - No remote code, no analytics, no tracking
-- Only stores tab URLs/titles locally (chrome.storage.local)
+- Only stores tab URLs/titles locally
 - No content scripts or host permissions
 - Strong Content Security Policy
 
