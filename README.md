@@ -5,14 +5,14 @@ Your tab data stays private on your device. Works on Chrome, Firefox, Edge, Oper
 
 ---
 
+Popup: Open tabs from URLs, save all open tabs
 ![Tab Manager Popup](tm1.png)
-*Popup: Open tabs from URLs, save all open tabs*
 
+Toolbar badge showing the number of open tabs
 ![Toolbar Badge Example](tm2.png)
-*Toolbar badge showing the number of open tabs*
 
+Tab Manager page: view, copy, and manage saved URLs
 ![Tab Manager Page](tm3.png)
-*Tab Manager page: view, copy, and manage saved URLs*
 
 ---
 
