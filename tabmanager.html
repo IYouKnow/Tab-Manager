@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tab Manager - Saved URLs</title>
+  <meta charset="UTF-8">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #0f0f0f;
+      color: #ffffff;
+      line-height: 1.6;
+      min-height: 100vh;
+      width: 100%;
+    }
+    
+    .container {
+      background: #1a1a1a;
+      padding: 40px;
+      min-height: 100vh;
+      width: 100%;
+      border: none;
+    }
+    
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .section-header h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: #60a5fa;
+      margin: 0;
+      background: none;
+      -webkit-background-clip: initial;
+      -webkit-text-fill-color: initial;
+      background-clip: initial;
+    }
+    .section-header h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #60a5fa;
+      margin: 0;
+    }
+    
+    .section {
+      margin: 30px 0;
+      padding: 24px;
+      border: 1px solid #333333;
+      border-radius: 16px;
+      background: #262626;
+      backdrop-filter: blur(10px);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      height: 85vh;
+      min-height: 500px;
+      overflow: hidden; /* Prevent children from overflowing */
+      box-sizing: border-box;
+    }
+    
+    .section:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+    }
+    
+    .section h2 {
+      margin: 0 0 20px 0;
+      color: #60a5fa;
+      font-size: 20px;
+      font-weight: 600;
+    }
+    
+    .section p {
+      color: #94a3b8;
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+    
+    textarea {
+      flex: 1 1 auto;
+      width: 100%;
+      min-height: 400px;
+      height: 100%;
+      margin: 8px 0;
+      padding: 16px;
+      border: 2px solid #404040;
+      border-radius: 12px;
+      font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      resize: vertical;
+      background: #1f1f1f;
+      color: #ffffff;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    textarea:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    
+    textarea::placeholder {
+      color: #666666;
+    }
+    
+    .button-group {
+      margin: 20px 0;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+    
+    button {
+      padding: 12px 24px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      min-width: 120px;
+    }
+    
+    button:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    button.secondary {
+      background: #475569;
+    }
+    
+    button.secondary:hover {
+      background: #334155;
+    }
+    
+    button.danger {
+      background: #dc2626;
+    }
+    
+    button.danger:hover {
+      background: #b91c1c;
+    }
+    
+    .status {
+      margin: 4px 0 0 0; /* Smaller top margin */
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      width: 100%;
+      box-sizing: border-box;
+      align-self: flex-start;
+      max-width: 100%;
+    }
+    
+    .success {
+      background: rgba(34, 197, 94, 0.1);
+      color: #22c55e;
+      border: 1px solid rgba(34, 197, 94, 0.2);
+    }
+    
+    .error {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+    
+    .info {
+      background: rgba(59, 130, 246, 0.1);
+      color: #3b82f6;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    
+    .tab-count {
+      font-weight: 700;
+      color: #60a5fa;
+      font-size: 16px;
+    }
+    
+    .tab-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding: 12px 16px;
+      background: rgba(96, 165, 250, 0.1);
+      border: 1px solid rgba(96, 165, 250, 0.2);
+      border-radius: 8px;
+    }
+    
+    .tab-info p {
+      margin: 0;
+      color: #cbd5e1;
+      font-size: 14px;
+    }
+    
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      backdrop-filter: blur(5px);
+    }
+    
+    .modal {
+      background: #1a1a1a;
+      border: 1px solid #333333;
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      animation: modalSlideIn 0.3s ease;
+    }
+    
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    
+    .modal h3 {
+      color: #ef4444;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    
+    .modal p {
+      color: #94a3b8;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    
+    .modal-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+    
+    .modal-buttons button {
+      min-width: 100px;
+      padding: 10px 20px;
+      font-size: 14px;
+    }
+    
+    .modal-buttons .cancel-btn {
+      background: #475569;
+    }
+    
+    .modal-buttons .cancel-btn:hover {
+      background: #334155;
+    }
+    
+    .modal-buttons .confirm-btn {
+      background: #dc2626;
+    }
+    
+    .modal-buttons .confirm-btn:hover {
+      background: #b91c1c;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="section">
+      <div class="section-header">
+        <h1>Tab Manager</h1>
+        <h2>Saved URLs</h2>
+      </div>
+      <div class="tab-info">
+        <p>Currently saved: <span id="tabCount" class="tab-count">0</span> tabs</p>
+      </div>
+      <p>Copy these URLs to save them to a file:</p>
+      <textarea id="savedUrls" readonly placeholder="No saved tabs found. Use the extension popup to save tabs first."></textarea>
+      <div class="button-group">
+        <button id="copyBtn">Copy All URLs</button>
+        <button id="refreshBtn">Refresh</button>
+        <button id="clearBtn" class="danger">Clear Saved Tabs</button>
+      </div>
+      <div id="status" class="status" style="display: none;"></div>
+    </div>
+  </div>
+
+  <!-- Custom Modal -->
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal">
+      <h3>⚠️ Clear Saved Tabs</h3>
+      <p>Are you sure you want to clear all saved tabs? This action cannot be undone.</p>
+      <div class="modal-buttons">
+        <button class="cancel-btn" id="cancelClear">Cancel</button>
+        <button class="confirm-btn" id="confirmClear">Clear All</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="tabmanager.js"></script>
+</body>
+</html> 

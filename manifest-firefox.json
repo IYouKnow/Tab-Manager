@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Tab Manager Extension",
+  "version": "1.0",
+  "description": "Save tabs and manage them with a comprehensive interface",
+  "permissions": [
+    "tabs",
+    "storage"
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "16": "logo.png",
+    "32": "logo.png",
+    "48": "logo.png",
+    "128": "logo.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "savetabs@tabmanager"
+    }
+  }
+} 
