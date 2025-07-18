@@ -144,6 +144,114 @@
       transform: translateY(-2px);
       box-shadow: 0 8px 25px rgba(0,0,0,0.3);
     }
+
+    textarea::-webkit-scrollbar {
+      height: 8px;
+      width: 8px;
+      background: #23272f;
+      border-radius: 8px;
+    }
+    textarea::-webkit-scrollbar-thumb {
+      background: #2563eb;
+      border-radius: 8px;
+    }
+    textarea::-webkit-scrollbar-thumb:hover {
+      background: #1d4ed8;
+    }
+    textarea::-webkit-scrollbar-corner {
+      background: #23272f;
+    }
+    /* Firefox */
+    textarea {
+      scrollbar-width: thin;
+      scrollbar-color: #2563eb #23272f;
+    }
+
+    /* Light theme styles */
+    body.light-theme {
+      background: #f4f6fa;
+      color: #222;
+    }
+    body.light-theme .section {
+      background: #fff;
+      border-color: #e5e7eb;
+      color: #222;
+    }
+    body.light-theme textarea {
+      background: #f8fafc;
+      color: #222;
+      border-color: #cbd5e1;
+    }
+    body.light-theme textarea:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+    }
+    body.light-theme button {
+      background: #2563eb;
+      color: #fff;
+    }
+    body.light-theme button:hover {
+      background: #1d4ed8;
+    }
+    body.light-theme .save-button-small {
+      background: #2563eb;
+      color: #fff;
+    }
+    body.light-theme .status.success {
+      background: #e0fce6;
+      color: #15803d;
+      border-color: #bbf7d0;
+    }
+    body.light-theme .status.error {
+      background: #fee2e2;
+      color: #b91c1c;
+      border-color: #fecaca;
+    }
+    body.light-theme .status.info {
+      background: #dbeafe;
+      color: #2563eb;
+      border-color: #bfdbfe;
+    }
+    body.light-theme h2,
+    body.light-theme h3,
+    body.light-theme label {
+      color: #222 !important;
+    }
+    body.light-theme button,
+    body.light-theme .save-button-small {
+      background: #fff;
+      color: #2563eb;
+      border: 1px solid #2563eb;
+    }
+    body.light-theme button:hover,
+    body.light-theme .save-button-small:hover {
+      background: #e0e7ef;
+      color: #1d4ed8;
+      border: 1px solid #1d4ed8;
+    }
+    body.light-theme input[type="number"] {
+      background: #fff !important;
+      color: #222 !important;
+      border: 1px solid #cbd5e1;
+      caret-color: #222;
+    }
+    body.light-theme #backBtn {
+      background: #fff !important;
+      border: 1px solid #2563eb !important;
+      color: #2563eb !important;
+    }
+    body.light-theme #backBtn:hover {
+      background: #e0e7ef !important;
+      color: #1d4ed8 !important;
+      border: 1px solid #1d4ed8 !important;
+    }
+    body.light-theme #backBtn span {
+      color: #2563eb !important;
+    }
+    body.light-theme input[type="number"]:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 2px #bfdbfe;
+    }
   </style>
 </head>
 <body>
@@ -154,11 +262,44 @@
   
   <div id="saveStatus" class="status" style="display: none;"></div>
   
-  <div class="section">
-    <h3>Open Tabs from URLs</h3>
-    <textarea id="urlInput" placeholder="Enter URLs (one per line)&#10;Example:&#10;https://www.google.com&#10;https://www.github.com"></textarea>
-    <button id="openTabsBtn">Open All URLs</button>
-    <div id="openStatus" class="status" style="display: none;"></div>
+  <div id="mainContent">
+    <div class="section" style="position:relative;">
+      <button id="settingsBtn" title="Settings" style="position:absolute; top:12px; right:12px; background:none; border:none; cursor:pointer; font-size:18px; color:#60a5fa; padding:4px; width:32px; height:32px; display:flex; align-items:center; justify-content:center;"><span style="pointer-events:none;">⚙️</span></button>
+      <h3 style="margin-top:0;">Open Tabs from URLs</h3>
+      <textarea id="urlInput" placeholder="Enter URLs (one per line)&#10;Example:&#10;https://www.google.com&#10;https://www.github.com" style="white-space: nowrap; overflow-x: auto;"></textarea>
+      <div id="tabCountInfo" style="color:#60a5fa; font-size:13px; margin-bottom:8px;">Tabs to open: 0</div>
+      <button id="openTabsBtn">Open All URLs</button>
+      <div id="openStatus" class="status" style="display: none;"></div>
+    </div>
+  </div>
+
+  <div id="settingsPage" style="display:none;">
+    <div class="section" style="position:relative;">
+      <button id="backBtn" style="position:absolute; top:12px; left:12px; z-index:2; background:#23272f; border:1px solid #333; border-radius:50%; cursor:pointer; font-size:18px; color:#60a5fa; padding:4px; width:32px; height:32px; display:flex; align-items:center; justify-content:center; transition:background 0.2s, box-shadow 0.2s; box-shadow:0 2px 8px rgba(0,0,0,0.08);" onmouseover='this.style.background="#1e293b"' onmouseout='this.style.background="#23272f"'><span style="pointer-events:none;">←</span></button>
+      <div style="display:flex; justify-content:center; align-items:center; width:100%; position:relative;">
+        <h3 style="margin-top:0; margin-bottom:16px; text-align:center; flex:1;">Settings</h3>
+      </div>
+      <div style="margin: 8px 0 8px 0; display: flex; align-items: center; gap: 8px;">
+        <input type="checkbox" id="openWithDelay" checked style="accent-color: #2563eb; width: 16px; height: 16px;">
+        <label for="openWithDelay" style="color: #94a3b8; font-size: 13px; cursor: pointer;">Open tabs with delay (safer for your computer)</label>
+      </div>
+      <div style="margin: 4px 0 12px 0; display: flex; align-items: center; gap: 8px;">
+        <label for="delayInput" style="color: #94a3b8; font-size: 13px;">Delay between tabs (ms):</label>
+        <input type="number" id="delayInput" min="0" max="5000" value="150" style="width: 70px; padding: 4px 8px; border-radius: 6px; border: 1px solid #333; background: #181818; color: #fff; font-size: 13px;">
+      </div>
+      <div style="margin: 4px 0 12px 0; display: flex; align-items: center; gap: 8px;">
+        <label for="batchSizeInput" style="color: #94a3b8; font-size: 13px;">Batch size:</label>
+        <input type="number" id="batchSizeInput" min="1" max="50" value="5" style="width: 70px; padding: 4px 8px; border-radius: 6px; border: 1px solid #333; background: #181818; color: #fff; font-size: 13px;">
+      </div>
+      <div style="margin: 4px 0 12px 0; display: flex; align-items: center; gap: 8px;">
+        <input type="checkbox" id="openInBackground" checked style="accent-color: #2563eb; width: 16px; height: 16px;">
+        <label for="openInBackground" style="color: #94a3b8; font-size: 13px; cursor: pointer;">Open tabs in background</label>
+      </div>
+      <div style="margin: 8px 0 8px 0; display: flex; align-items: center; gap: 8px;">
+        <input type="checkbox" id="themeToggle" style="accent-color: #2563eb; width: 16px; height: 16px;">
+        <label for="themeToggle" style="color: #94a3b8; font-size: 13px; cursor: pointer;">Dark mode</label>
+      </div>
+    </div>
   </div>
 
   <script src="popup.js"></script>

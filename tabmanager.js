@@ -2,6 +2,14 @@
 document.addEventListener('DOMContentLoaded', () => {
   loadSavedTabs();
   setupModal();
+  // Apply theme from storage
+  chrome.storage.local.get(['theme'], (data) => {
+    if (data.theme === 'light') {
+      document.body.classList.add('light-theme');
+    } else {
+      document.body.classList.remove('light-theme');
+    }
+  });
 });
 
 // Load saved tabs from storage
@@ -9,9 +17,10 @@ function loadSavedTabs() {
   chrome.storage.local.get(['tabs'], (data) => {
     const savedUrlsTextarea = document.getElementById('savedUrls');
     const tabCountSpan = document.getElementById('tabCount');
-    
+    const clearBtn = document.getElementById('clearBtn');
+    const hasTabs = data.tabs && data.tabs.length > 0;
     if (savedUrlsTextarea && tabCountSpan) {
-      if (data.tabs && data.tabs.length > 0) {
+      if (hasTabs) {
         // Format URLs for display (one per line)
         const urls = data.tabs.map(tab => tab.url).join('\n');
         savedUrlsTextarea.value = urls;
@@ -20,6 +29,12 @@ function loadSavedTabs() {
         savedUrlsTextarea.value = '';
         tabCountSpan.textContent = '0';
       }
+    }
+    // Enable/disable the clear button
+    if (clearBtn) {
+      clearBtn.disabled = !hasTabs;
+      clearBtn.style.opacity = hasTabs ? '1' : '0.5';
+      clearBtn.style.cursor = hasTabs ? 'pointer' : 'not-allowed';
     }
   });
 }
@@ -107,8 +122,25 @@ if (copyBtn) {
 const refreshBtn = document.getElementById('refreshBtn');
 if (refreshBtn) {
   refreshBtn.addEventListener('click', () => {
-    loadSavedTabs();
-    showStatus('Refreshed saved tabs', 'info');
+    // Save the currently open browser tabs
+    chrome.tabs.query({}, (tabs) => {
+      if (!tabs || tabs.length === 0) {
+        showStatus('No tabs open to save', 'error');
+        return;
+      }
+      let tabData = tabs.map(tab => ({
+        title: tab.title,
+        url: tab.url
+      }));
+      const saveData = {
+        tabs: tabData,
+        lastSaved: new Date().toISOString()
+      };
+      chrome.storage.local.set(saveData, () => {
+        loadSavedTabs();
+        showStatus('Saved and refreshed open tabs', 'success');
+      });
+    });
   });
 }
 
